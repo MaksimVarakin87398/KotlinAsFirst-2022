@@ -3,7 +3,9 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -68,13 +70,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int)= when {
+fun ageDescription(age: Int) = when {
     (age in 1..99) && (age % 10 == 1) && (age !in 11..19) -> "$age год"
-    (age in 100..199) && (age % 10 ==1) && (age !in 111..119) -> "$age год"
-    (age in 1..99) && (age % 10 in 2..4) && (age !in 11..19)-> "$age года"
+    (age in 100..199) && (age % 10 == 1) && (age !in 111..119) -> "$age год"
+    (age in 1..99) && (age % 10 in 2..4) && (age !in 11..19) -> "$age года"
     (age in 100..199) && (age % 10 in 2..4) && (age !in 111..119) -> "$age года"
-    (age in 1..99) && ((age in 11..19) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
-    (age in 100..199) && ((age in 111..119) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
+    (age in 1..99) && ((age in 11..14) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
+    (age in 100..199) && ((age in 111..114) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
     else -> "ошибка"
 }
 
@@ -93,7 +95,7 @@ fun timeForHalfWay(
     val s1 = t1 * v1
     val s2 = t2 * v2
     val s3 = t3 * v3
-    val path =( s1 + s2 + s3)
+    val path = (s1 + s2 + s3)
     return when {
         s1 > path / 2 -> path / v1 / 2
         s1 + s2 > path / 2 -> t1 + (path / 2 - s1 ) / v2
@@ -149,7 +151,18 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val l = maxOf(a, b, c)
+    val s = minOf(a, b, c)
+    val m = (a + b + c) - (l + s)
+    return when {
+        (a + b <= c) || (b + c <= a) || (a + c <= b) -> -1
+        l * l < m * m + s * s -> 0
+        l * l == m * m + s * s -> 1
+        l * l > m * m + s * s -> 2
+        else -> -1
+    }
+}
 
 /**
  * Средняя (3 балла)
