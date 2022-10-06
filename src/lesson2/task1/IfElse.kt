@@ -76,7 +76,7 @@ fun ageDescription(age: Int) = when {
     (age in 1..99) && (age % 10 in 2..4) && (age !in 11..19) -> "$age года"
     (age in 100..199) && (age % 10 in 2..4) && (age !in 111..119) -> "$age года"
     (age in 1..99) && ((age in 11..14) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
-    (age in 100..199) && ((age in 111..114) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"
+    (age in 100..199) && ((age in 111..114) || (age % 10 in 5..9) || (age % 10 == 0)) -> "$age лет"  //  :(
     else -> "ошибка"
 }
 
@@ -122,7 +122,7 @@ fun whichRookThreatens(
 ) = when {
     ((kingX == rookX1) || (kingY == rookY1)) && (kingX != rookX2) && (kingY != rookY2) -> 1
     (kingX != rookX1) && (kingY != rookY1) && ((kingX == rookX2) || (kingY == rookY2)) -> 2
-    ((kingX == rookX1) || (kingY == rookY1)) && ((kingX == rookX2) || (kingY == rookY2)) -> 3
+    ((kingX == rookX1) || (kingY == rookY1)) && ((kingX == rookX2) || (kingY == rookY2)) -> 3 // ?????
     else -> 0
 
 }
@@ -172,4 +172,13 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    (a in c..d && b in c..d) -> b - a
+    (c in a..b && d in a..b) -> d - c
+    (a !in c..d && b in c..d) -> b - c
+    (a in c..d && b !in c..d) -> d - a // ПОЧЕМУ ЭТО ТАК ВЫДАЕТ
+    (c !in a..b && d in a..b) -> d - a
+    (c in a..b && d !in a..b) -> b - c
+    else -> -1
+
+}
