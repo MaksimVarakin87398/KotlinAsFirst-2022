@@ -7,6 +7,7 @@ import lesson1.task1.sqr
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -141,8 +142,12 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
-
+): Int = when {
+    (abs(kingX - bishopX) == abs(kingY - bishopY)) && (kingX == rookX || kingY == rookY) -> 3
+    abs(kingX - bishopX) == abs(kingY - bishopY) -> 2
+    (kingX == rookX || kingY == rookY) -> 1
+    else -> 0
+}
 /**
  * Простая (2 балла)
  *
