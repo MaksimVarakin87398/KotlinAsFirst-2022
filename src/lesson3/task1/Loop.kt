@@ -192,7 +192,18 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var rebmun = 0
+    var cutnum = 0
+    var num = n
+    while (num > 0) {
+        cutnum = num % 10
+        num /= 10
+        rebmun = rebmun * 10 + cutnum
+    }
+    return rebmun
+}
+
 
 /**
  * Средняя (3 балла)
@@ -246,7 +257,11 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var digitcount = 0
+    var num = 1
+    var sqrdigit = 0
+}
 
 /**
  * Сложная (5 баллов)
