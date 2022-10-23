@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
 import kotlin.math.*
 
 // Урок 3: циклы
@@ -224,7 +225,20 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var nn = n
+    var curd = n % 10
+    var prevd = 0
+    while (nn>=1) {
+        prevd = nn % 10
+        nn/= 10
+        if (nn>=1) {
+            curd = nn % 10
+        }
+        if (curd != prevd) return true
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -258,9 +272,21 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var digitcount = 0
-    var num = 1
-    var sqrdigit = 0
+    var digitcount = 0 // Счетчик чисел пос-ти
+    var sqrnum = 1 // Генератор квадрата числа
+    var sqrdigit = 0 // Нынешнее число пос-ти
+    while (digitcount < n) {
+        var num = sqr(sqrnum) // Нынешний квадрат
+        while (num > 0) {
+            if (num / 10 > 0) {
+                digitcount ++
+            } else {
+                sqrdigit = num %10
+            }
+            num/= 10
+        }
+    }
+    return if (n == 1) 1 else sqrdigit
 }
 
 /**
@@ -288,4 +314,4 @@ fun fibSequenceDigit(n: Int): Int {
         fibnum++
     }
     return fibdigit
-}
+ }
