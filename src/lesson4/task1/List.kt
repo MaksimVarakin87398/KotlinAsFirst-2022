@@ -137,10 +137,16 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else (list.sum() 
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> {
-    return if (list.isEmpty()) 0 else
+fun center(list: MutableList<Double>): MutableList<Double> = when {
+    list.isEmpty() -> list
+    else -> {
+        val midas = (list.sum() / list.size )
+        for (i in 0 until list.size) {
+            list[i] -= midas
+        }
+        list
+    }
 }
-
 /**
  * Средняя (3 балла)
  *
@@ -148,7 +154,16 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int = when {
+    a.isEmpty() && b.isEmpty() -> 0
+    else -> {
+        var sum = 0
+        for (i in 0 until a.size) {
+            sum += a[i] * b[i]
+        }
+        sum
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -158,7 +173,16 @@ fun times(a: List<Int>, b: List<Int>): Int = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int = when {
+    p.isEmpty() -> 0
+    else -> {
+        var sum = 0
+        for (i in 0 until p.size) {
+            sum += (p[i] * (Math.pow(x.toDouble(), i.toDouble())).toInt())
+        }
+        sum
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -170,7 +194,15 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> = when {
+    list.isEmpty() -> list
+    else -> {
+        for (i in 0 until list.size - 1) {
+            list[i + 1] += list[i]
+        }
+        list
+    }
+}
 
 /**
  * Средняя (3 балла)
