@@ -212,7 +212,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = when {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    var result = mutableListOf<Int>()
+    val result = mutableListOf<Int>()
     var m = n
     var p = 2
     while (m > 1) {
@@ -240,7 +240,16 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    if (n == 0) return listOf()
+    val re = mutableListOf<Int>()
+    var m = n
+    while (m > 0) {
+        re.add(m % base)
+        m /= base
+    }
+    return re.reversed()
+}
 
 /**
  * Сложная (4 балла)
@@ -286,7 +295,21 @@ fun decimalFromString(str: String, base: Int): String = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val rnum = listOf<Int>(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val rsym = listOf<String>("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var roma = ""
+    var m = n
+    var i = 0
+    while (m > 0) {
+        while (m - rnum[i] >= 0) {
+            roma += rsym[i]
+            m -= rnum[i]
+        }
+        i += 1
+    }
+    return roma
+}
 
 /**
  * Очень сложная (7 баллов)
