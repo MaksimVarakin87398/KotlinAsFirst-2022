@@ -100,9 +100,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val res = mutableMapOf<Int, MutableList<String>>()
-    for ((k, v) in grades)
-        if (res[v].isNullOrEmpty()) res[v] = mutableListOf(k)
-        else res[v]?.add(k)
+    for((stu, grd) in grades) {
+        if (res[grd].isNullOrEmpty()) res[grd] = mutableListOf(stu)
+        else res[grd]?.add(stu)
+    }
     return res
 }
 /**
@@ -117,7 +118,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     if (a.toSortedMap() == b.toSortedMap()) return true
-    for((k, v) in a) return v == b[k]
+    for((x, y) in a) return y == b[x]
     return false
 }
 /**
@@ -134,8 +135,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMap<String, String> {
+    for ((x, y) in b) if (a[x] == y) a.remove(x)
+    return a
 }
 
 /**
@@ -175,8 +177,22 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
-
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val count = mutableMapOf<String, Double>()
+    val res = mutableMapOf<String, Double>()
+    for (i in stockPrices.indices) when {
+        stockPrices[i].first !in res -> res[stockPrices[i].first] = stockPrices[i].second
+        else -> {
+            when {
+                (count[stockPrices[i].first] == null) -> count[stockPrices[i].first] = 2.0
+                else -> count[stockPrices[i].first] = count.getValue(stockPrices[i].first) + 1
+            }
+            res[stockPrices[i].first] = (res.getValue(stockPrices[i].first) + stockPrices[i].second)
+        }
+    }
+    for ((x) in count) res[x] = res.getValue(x) / count.getValue(x)
+    return res
+}
 /**
  * Средняя (4 балла)
  *
@@ -299,7 +315,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list.indices) if ((i != list.indexOf(number - list[i])) && (number - list[i] in list))
+        return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)

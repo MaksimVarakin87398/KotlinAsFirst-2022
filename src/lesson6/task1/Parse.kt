@@ -74,7 +74,23 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val months = listOf("января","февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+    val date = str.split(" ")
+    if (date.size == 3) {
+        try {
+            val day = date[0].toInt()
+            if ((date[1] in months) && (day in 1..31)) {
+                val month = months.indexOf(date[1]) + 1
+                if (month == 2 && !((date[2].toInt() % 4 == 0) && (date[2].toInt() % 100 != 0) || (date[2].toInt() %
+                            400 == 0)) && day >= 29) return ""
+                return String.format("%02d.%02d.%d", day, month, date[2].toInt())
+            } else return ""
+        } catch (e: NumberFormatException) {
+            return ""
+        }
+    } else return ""
+}
 
 /**
  * Средняя (4 балла)
@@ -114,7 +130,21 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (jumps.isEmpty()) return -1
+    var maxjump = -1
+    val l = jumps.trim().split(" ")
+    for (el in l) {
+        try {
+            if (el.isNotEmpty() && el.toInt() > maxjump)
+                maxjump = el.toInt()
+        } catch (e: NumberFormatException) {
+            if (el == " " || el == "" || el == "-" || el == "%") continue
+            else return -1
+        }
+    }
+    return maxjump
+}
 
 /**
  * Сложная (6 баллов)
@@ -127,7 +157,16 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (jumps.isEmpty()) return -1
+    val l = jumps.split(" ")
+    var m = -1
+    for (part in 1 until l.size step 2) {
+        val maxl = l[part - 1].toInt()
+        if ('+' in l[part] && m < maxl) m = maxl
+    }
+    return m
+}
 
 /**
  * Сложная (6 баллов)
