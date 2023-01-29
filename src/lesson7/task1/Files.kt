@@ -66,7 +66,6 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
 fun deleteMarked(inputName: String, outputName: String) {
     TODO()
 }
-
 /**
  * Средняя (14 баллов)
  *
@@ -76,7 +75,22 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+
+/**
+ * Средняя (12 баллов)
+ *
+ * В русском языке, как правило, после букв Ж, Ч, Ш, Щ пишется И, А, У, а не Ы, Я, Ю.
+ * Во входном файле с именем inputName содержится некоторый текст на русском языке.
+ * Проверить текст во входном файле на соблюдение данного правила и вывести в выходной
+ * файл outputName текст с исправленными ошибками.
+ *
+ * Регистр заменённых букв следует сохранять.
+ *
+ * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
+ *
+ */
+fun sibilants(inputName: String, outputName: String) {
     val replacement = mapOf('ы' to 'и', 'я' to 'а', 'ю' to 'у')
     val symbols = listOf('ж', 'ч', 'ш', 'щ')
     val output = File(outputName).bufferedWriter()
@@ -98,24 +112,6 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     }
     output.close()
 }
-
-/**
- * Средняя (12 баллов)
- *
- * В русском языке, как правило, после букв Ж, Ч, Ш, Щ пишется И, А, У, а не Ы, Я, Ю.
- * Во входном файле с именем inputName содержится некоторый текст на русском языке.
- * Проверить текст во входном файле на соблюдение данного правила и вывести в выходной
- * файл outputName текст с исправленными ошибками.
- *
- * Регистр заменённых букв следует сохранять.
- *
- * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
- *
- */
-fun sibilants(inputName: String, outputName: String) {
-    TODO()
-}
-
 /**
  * Средняя (15 баллов)
  *
