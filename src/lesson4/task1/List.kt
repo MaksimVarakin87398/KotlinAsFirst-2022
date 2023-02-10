@@ -137,16 +137,15 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else (list.sum() 
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = when {
-    list.isEmpty() -> list
-    else -> {
-        val midas = (list.sum() / list.size )
-        for (i in 0 until list.size) {
-            list[i] -= midas
-        }
-        list
+fun center(list: MutableList<Double>): MutableList<Double> {
+    if (list.isEmpty()) return list
+    val midas = (list.sum() / list.size)
+    for (i in 0 until list.size) {
+        list[i] -= midas
     }
+    return list
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -154,15 +153,13 @@ fun center(list: MutableList<Double>): MutableList<Double> = when {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = when {
-    a.isEmpty() && b.isEmpty() -> 0
-    else -> {
-        var sum = 0
-        for (i in 0 until a.size) {
-            sum += a[i] * b[i]
-        }
-        sum
+fun times(a: List<Int>, b: List<Int>): Int {
+    if (a.isEmpty() && b.isEmpty()) return 0
+    var sum = 0
+    for (i in a.indices) {
+        sum += a[i] * b[i]
     }
+    return sum
 }
 
 /**
@@ -173,15 +170,13 @@ fun times(a: List<Int>, b: List<Int>): Int = when {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = when {
-    p.isEmpty() -> 0
-    else -> {
-        var sum = 0
-        for (i in 0 until p.size) {
-            sum += (p[i] * (Math.pow(x.toDouble(), i.toDouble())).toInt())
-        }
-        sum
+fun polynom(p: List<Int>, x: Int): Int {
+    if (p.isEmpty()) return 0
+    var sum = 0
+    for (i in p.indices) {
+        sum += (p[i] * (x.toDouble().pow(i.toDouble())).toInt())
     }
+    return sum
 }
 
 /**
@@ -194,15 +189,14 @@ fun polynom(p: List<Int>, x: Int): Int = when {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = when {
-    list.isEmpty() -> list
-    else -> {
-        for (i in 0 until list.size - 1) {
-            list[i + 1] += list[i]
-        }
-        list
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if(list.isEmpty()) return list
+    for (i in 0 until list.size - 1) {
+        list[i + 1] += list[i]
     }
+    return list
 }
+
 
 /**
  * Средняя (3 балла)
@@ -218,8 +212,8 @@ fun factorize(n: Int): List<Int> {
     while (m > 1) {
         if (m % p == 0) {
             result.add(p)
-            m/= p
-        } else p += 1
+            m /= p
+        } else p++
     }
     return result
 }
@@ -262,7 +256,16 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val sym = "abcdefghijklmnopqrstuvwxyz"
+    var res = ""
+    val based = convert(n, base)
+    for (i in based.indices)
+        if (based[i] < 10)
+            res += based[i]
+        else res += sym[based[i] - 10]
+    return res
+}
 
 /**
  * Средняя (3 балла)
@@ -271,7 +274,16 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    val sym = "abcdefghijklmnopqrstuvwxyz"
+    var res = 0.0
+    val drev = digits.reversed()
+
+    for (i in drev.indices) {
+        res += drev[i].toDouble() * (base.toDouble().pow(i))
+    }
+    return res.toInt()
+}
 
 /**
  * Сложная (4 балла)

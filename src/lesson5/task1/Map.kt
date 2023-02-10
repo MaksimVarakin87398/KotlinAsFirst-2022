@@ -100,12 +100,13 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val res = mutableMapOf<Int, MutableList<String>>()
-    for((stu, grd) in grades) {
-        if (res[grd].isNullOrEmpty()) res[grd] = mutableListOf(stu)
-        else res[grd]?.add(stu)
+    for ((name, grade) in grades) {
+        if (res[grade].isNullOrEmpty()) res[grade] = mutableListOf(name)
+        else res[grade]?.add(name)
     }
     return res
 }
+
 /**
  * Простая (2 балла)
  *
@@ -118,9 +119,14 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     if (a.toSortedMap() == b.toSortedMap()) return true
-    for((x, y) in a) return y == b[x]
+    else {
+        for ((k) in a) {
+            if (a.getValue(k) == b.getValue(k)) return true
+        }
+    }
     return false
 }
+
 /**
  * Простая (2 балла)
  *
@@ -147,7 +153,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): MutableMa
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b.toSet()).toList()
 
 /**
  * Средняя (3 балла)
@@ -166,7 +172,15 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val diff = subtractOf(mapA.toMutableMap(), mapB.toMutableMap())
+    for ((name, number) in mapB) {
+        if (diff[name].isNullOrEmpty()) diff[name] = number
+        else diff[name] += ", " + mapB[name]
+    }
+    return diff
+}
+
 /**
  * Средняя (4 балла)
  *
@@ -178,21 +192,22 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val count = mutableMapOf<String, Double>()
-    val res = mutableMapOf<String, Double>()
-    for (i in stockPrices.indices) when {
-        stockPrices[i].first !in res -> res[stockPrices[i].first] = stockPrices[i].second
+    val count = mutableMapOf<String, Double>() // счетчик кол-ва акций
+    val res = mutableMapOf<String, Double>() // сумма акция
+    for (i in stockPrices.indices) when (stockPrices[i].first) {
+        !in res -> res[stockPrices[i].first] = stockPrices[i].second // заполнение res акциями
         else -> {
             when {
-                (count[stockPrices[i].first] == null) -> count[stockPrices[i].first] = 2.0
-                else -> count[stockPrices[i].first] = count.getValue(stockPrices[i].first) + 1
+                count[stockPrices[i].first] == null -> count[stockPrices[i].first] == 2.0
+                else -> count[stockPrices[i].first] = count.getValue(stockPrices[i].first) + 1.0
             }
             res[stockPrices[i].first] = (res.getValue(stockPrices[i].first) + stockPrices[i].second)
         }
     }
-    for ((x) in count) res[x] = res.getValue(x) / count.getValue(x)
+    for ((j) in count) res[j] = res.getValue(j) / count.getValue(j)
     return res
 }
+
 /**
  * Средняя (4 балла)
  *
@@ -219,15 +234,13 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    return when {
-        word.toSet().intersect(chars.map { it.lowercaseChar() }.toSet()) == word.lowercase(Locale.getDefault())
-            .toSet() -> true
-
-        chars.sorted() == word.toList().sorted() -> true
-        else -> false
-    }
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = when {
+    chars.isEmpty() || word.isEmpty() -> false
+    else -> chars.toSet().intersect(word.lowercase(Locale.getDefault()).toSet()) == word.lowercase(Locale.getDefault())
+        .toSet()
 }
+
+
 /**
  * Средняя (4 балла)
  *
@@ -241,13 +254,19 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val res = mutableMapOf<String, Int>()
-    for(i in list.indices)
-        if(list[i] !in res) res[list[i]] = 1
-        else res[list[i]] = res.getValue(list[i]) + 1
-    return res.filterValues { it > 1 }
+    var count = mutableMapOf<String, Int>()
+    var res = mutableMapOf<String, Int>()
+    if (list.isEmpty()) return emptyMap<String,Int>()
+    for (i in list.indices) when {          // Счет всех элементов мапа
+        list[i] !in count -> count[list[i]] = 1
+        else -> count[list[i]] = count.getValue(list[i]) + 1
+    }
+    for ((j) in count) {       // фильтрация всех одиночных элементов мапа
+        if (count[j] == 1) count.remove(j)
+    }
+    if (count.isEmpty()) return emptyMap<String,Int>()
+    return count
 }
-
 /**
  * Средняя (3 балла)
  *
@@ -315,11 +334,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in list.indices) if ((i != list.indexOf(number - list[i])) && (number - list[i] in list))
-        return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
-    return Pair(-1, -1)
-}
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+
 
 /**
  * Очень сложная (8 баллов)

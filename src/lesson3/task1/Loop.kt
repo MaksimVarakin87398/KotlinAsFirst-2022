@@ -75,10 +75,8 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var count = 1
     var num = n
-    while (num > 0) {
-        if (num / 10 > 0) {
-            count++
-        }
+    while (num >= 10) {
+        count++
         num /= 10
     }
     return count
@@ -90,12 +88,19 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = when {
-    n == 0 -> 0
-    n == 1 -> 1
-    else -> fib(n - 1) + fib(n - 2)
+fun fib(n: Int): Int {
+    if (n == 1 || n == 2) return 1
+    var n2 = 1 // Предыдущее
+    var n1 = 1 // Настоящее
+    var n0: Int  // Настоящее но до прибавления
+    repeat(n - 2) {
+        n0 = n1 // То, чем  станет n2
+        n1 += n2 //След. число в последовательности
+        n2 = n0 // n2 "смещается вправо"
+    }
+    return n1
 }
-
+//fib(n - 1) + fib(n - 2)
 /**
  * Простая (2 балла)
  *
@@ -125,6 +130,7 @@ fun maxDivisor(n: Int): Int {
     }
     return maxdiv
 }
+
 /**
  * Простая (2 балла)
  *
@@ -162,13 +168,18 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = m * n
-    for (i in m * n downTo 2) {
-        if ((i % m == 0) && (i % n == 0)) {
-            k = min(k, i)
-        }
+    val k = m * n
+    return k / nod(m, n)
+}
+
+fun nod(m: Int, n: Int): Int {
+    var x = m
+    var y = n
+    while (x != y) {
+        if (x > y) x -= y
+        else y -= x
     }
-    return k
+    return x
 }
 
 /**
@@ -178,12 +189,7 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..m * n) {
-        if (m % i == 0 && n % i == 0) return false
-    }
-    return true
-}
+fun isCoPrime(m: Int, n: Int): Boolean = nod(m, n) == 1
 
 /**
  * Средняя (3 балла)
@@ -228,10 +234,10 @@ fun hasDifferentDigits(n: Int): Boolean {
     var nn = n
     var curd = n % 10
     var prevd = 0
-    while (nn>=1) {
+    while (nn >= 1) {
         prevd = nn % 10
-        nn/= 10
-        if (nn>=1) {
+        nn /= 10
+        if (nn >= 1) {
             curd = nn % 10
         }
         if (curd != prevd) return true
@@ -271,6 +277,7 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int = TODO()
+
 /**
  * Сложная (5 баллов)
  *
@@ -280,20 +287,4 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    var digitcount = 0
-    var fibnum = 1
-    var fibdigit = 0
-    while (digitcount != n) {
-        var num = fib(fibnum)
-        while (num > 0) {
-            if (num / 10 > 0) {
-                digitcount++
-                fibdigit = num % 10
-            }
-            num /= 10
-        }
-        fibnum++
-    }
-    return fibdigit
- }
+fun fibSequenceDigit(n: Int): Int = TODO()

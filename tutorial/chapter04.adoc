@@ -516,13 +516,8 @@ fun isPalindrome(str: String): Boolean {
 
 [source,kotlin]
 ----
-fun <T> List<T>.joinToString(
-        separator: String = ", ",
-        prefix: String = "",
-        postfix: String = "",
-        limit: Int = -1,
-        truncated: String = "...",
-        transform: (T) -> String = { "$it" }
+fun <T> List<T>.joinToString(separator: String = ", ",prefix: String = "",postfix: String = "",limit: Int = -1,
+                             truncated: String = "...",transform: (T) -> String = { "$it" }
 ): String {
     // ...
 }
