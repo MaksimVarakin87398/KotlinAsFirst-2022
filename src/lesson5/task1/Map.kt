@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
 import java.util.*
 
 // Урок 5: ассоциативные массивы и множества
@@ -195,16 +196,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val count = mutableMapOf<String, Double>() // счетчик кол-ва акций
     val res = mutableMapOf<String, Double>() // сумма акция
     for (i in stockPrices.indices) when (stockPrices[i].first) {
-        !in res -> res[stockPrices[i].first] = stockPrices[i].second // заполнение res акциями
+        !in res -> {
+            res[stockPrices[i].first] = stockPrices[i].second
+            count[stockPrices[i].first] = 1.0
+        }
+
         else -> {
-            when {
-                count[stockPrices[i].first] == null -> count[stockPrices[i].first] == 2.0
-                else -> count[stockPrices[i].first] = count.getValue(stockPrices[i].first) + 1.0
-            }
-            res[stockPrices[i].first] = (res.getValue(stockPrices[i].first) + stockPrices[i].second)
+            res[stockPrices[i].first] = res.getValue(stockPrices[i].first) + stockPrices[i].second
+            count[stockPrices[i].first] = count.getValue(stockPrices[i].first) + 1.0
         }
     }
-    for ((j) in count) res[j] = res.getValue(j) / count.getValue(j)
+    for ((j) in count) res[j] = res.getValue(j) / count.getValue(j) // Я пытался сделать это через .map но не получилось
     return res
 }
 
@@ -255,13 +257,14 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = when {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val count = mutableMapOf<String, Int>()
-    if (list.isEmpty()) return emptyMap<String, Int>()
+    if (list.isEmpty()) return emptyMap()
     for (i in list.indices) when {          // Счет всех элементов мапа
         list[i] !in count -> count[list[i]] = 1
         else -> count[list[i]] = count.getValue(list[i]) + 1
     }
     return count.filterValues { it > 1 }
 }
+
 /**
  * Средняя (3 балла)
  *
@@ -329,8 +332,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
-
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list.indices) {
+        if (i != list.indexOf(number - list[i]) && number - list[i] in list) {
+            return Pair(i, list.indexOf(number - list[i])).sorted()
+        }
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
