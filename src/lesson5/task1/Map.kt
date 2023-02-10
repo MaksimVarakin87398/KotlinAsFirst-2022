@@ -254,18 +254,13 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = when {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    var count = mutableMapOf<String, Int>()
-    var res = mutableMapOf<String, Int>()
-    if (list.isEmpty()) return emptyMap<String,Int>()
+    val count = mutableMapOf<String, Int>()
+    if (list.isEmpty()) return emptyMap<String, Int>()
     for (i in list.indices) when {          // Счет всех элементов мапа
         list[i] !in count -> count[list[i]] = 1
         else -> count[list[i]] = count.getValue(list[i]) + 1
     }
-    for ((j) in count) {       // фильтрация всех одиночных элементов мапа
-        if (count[j] == 1) count.remove(j)
-    }
-    if (count.isEmpty()) return emptyMap<String,Int>()
-    return count
+    return count.filterValues { it > 1 }
 }
 /**
  * Средняя (3 балла)
