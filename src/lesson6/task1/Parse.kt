@@ -3,7 +3,8 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
-import java.lang.NumberFormatException
+import kotlin.NumberFormatException
+import kotlin.math.max
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -52,7 +53,7 @@ fun timeSecondsToStr(seconds: Int): String {
  */
 fun main() {
     println("Введите время в формате ЧЧ:ММ:СС")
-    val line = readLine()
+    val line = readlnOrNull()
     if (line != null) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
@@ -78,7 +79,7 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    var months = listOf<String>(
+    val months = listOf(
         "января",
         "февраля",
         "марта",
@@ -92,19 +93,21 @@ fun dateStrToDigit(str: String): String {
         "ноября",
         "декабря"
     )
-    var date = str.split("")
-    val daylimit = daysInMonth(months.indexOf(date[1]) + 1, date.last().toInt())
-    if (date.size == 3 && date[0].toInt() <= daylimit) {
+    val date = str.split(" ")
+    if (date.size != 3) return ""
+    val daylimit = daysInMonth(months.indexOf(date[1]) + 1, date[2].toInt())
+    return if (date[0].toInt() <= daylimit) {
         try {
             val day = date[0].toInt()
             val month = months.indexOf(date[1]) + 1
             val year = date.last().toInt()
-            return String.format("%02d.%02d.%d", day, month, year)
+            String.format("%02d.%02d.%d", day, month, year)
         } catch (e: NumberFormatException) {
-            return ""
+            ""
         }
-    } else return "365847"
+    } else ""
 }
+
 /**
 month.indexOf(date[2])
 val daylimit = daysInMonth(date[1].toInt() , month.indexOf(date[2]))
@@ -148,7 +151,20 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO() // siuighspiroufhjseioruthjewr
+fun bestLongJump(jumps: String): Int {
+    if (jumps.isEmpty()) return -1
+    val results = jumps.split(" ")
+    var juuump = -1
+    for (i in results) {
+        try {
+            if (i.isNotEmpty()) juuump = max(juuump, i.toInt())
+        } catch (e: NumberFormatException) {
+            if (i == "-" || i == "%") continue
+            else return -1
+        }
+    }
+    return juuump
+}
 
 /**
  * Сложная (6 баллов)
@@ -161,7 +177,7 @@ fun bestLongJump(jumps: String): Int = TODO() // siuighspiroufhjseioruthjewr
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO() // khgoweurhjtgowejrhnfgksejrfhj
+fun bestHighJump(jumps: String): Int = TODO()
 
 /**
  * Сложная (6 баллов)
@@ -196,7 +212,24 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    if (description.isEmpty()) return ""
+    var exprice = 0.0
+    var exname = ""
+    val items = description.split(";")
+    for (i in items) {
+        try {
+            val item = i.trim().split(" ")
+            if (item[1].toDouble() > exprice && item[1].toDouble() >= 0) {
+                exprice = item[1].toDouble()
+                exname = item[0]
+            }
+        } catch (e: NumberFormatException) {
+            return ""
+        }
+    }
+    return exname
+}
 
 /**
  * Сложная (6 баллов)
