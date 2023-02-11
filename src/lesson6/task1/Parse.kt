@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -75,24 +78,39 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val months = listOf("января","февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
-    val date = str.split(" ")
-    if (date.size == 3) {
+    var months = listOf<String>(
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря"
+    )
+    var date = str.split("")
+    val daylimit = daysInMonth(months.indexOf(date[1]) + 1, date.last().toInt())
+    if (date.size == 3 && date[0].toInt() <= daylimit) {
         try {
             val day = date[0].toInt()
-            if ((date[1] in months) && (day in 1..31)) {
-                val month = months.indexOf(date[1]) + 1
-                if (month == 2 && !((date[2].toInt() % 4 == 0) && (date[2].toInt() % 100 != 0) || (date[2].toInt() %
-                            400 == 0)) && day >= 29) return ""
-                return String.format("%02d.%02d.%d", day, month, date[2].toInt())
-            } else return ""
+            val month = months.indexOf(date[1]) + 1
+            val year = date.last().toInt()
+            return String.format("%02d.%02d.%d", day, month, year)
         } catch (e: NumberFormatException) {
             return ""
         }
-    } else return ""
+    } else return "365847"
 }
-
 /**
+month.indexOf(date[2])
+val daylimit = daysInMonth(date[1].toInt() , month.indexOf(date[2]))
+
+return String.format("%02d.%02d.%d", date[0], month.indexOf(date[1]) + 1, date[2])
+
  * Средняя (4 балла)
  *
  * Дата представлена строкой вида "15.07.2016".
@@ -130,21 +148,7 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int {
-    if (jumps.isEmpty()) return -1
-    var maxjump = -1
-    val l = jumps.trim().split(" ")
-    for (el in l) {
-        try {
-            if (el.isNotEmpty() && el.toInt() > maxjump)
-                maxjump = el.toInt()
-        } catch (e: NumberFormatException) {
-            if (el == " " || el == "" || el == "-" || el == "%") continue
-            else return -1
-        }
-    }
-    return maxjump
-}
+fun bestLongJump(jumps: String): Int = TODO() // siuighspiroufhjseioruthjewr
 
 /**
  * Сложная (6 баллов)
@@ -157,16 +161,7 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    if (jumps.isEmpty()) return -1
-    val l = jumps.split(" ")
-    var m = -1
-    for (part in 1 until l.size step 2) {
-        val maxl = l[part - 1].toInt()
-        if ('+' in l[part] && m < maxl) m = maxl
-    }
-    return m
-}
+fun bestHighJump(jumps: String): Int = TODO() // khgoweurhjtgowejrhnfgksejrfhj
 
 /**
  * Сложная (6 баллов)
